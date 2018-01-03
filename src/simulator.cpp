@@ -298,8 +298,6 @@ int main(int argc, char** argv) {
         if (gui)
             namedWindow(WINDOW_NAME, CV_GUI_NORMAL);
 
-        //reader.read(cubemap);
-
         if (video_length < (int)groundtruth.size()) {
             DEBUGMSG("Warning: Image sequence shorter that groundtruth. Truncating.\n");
             groundtruth = vector<SpherePolygon>(groundtruth.begin(), groundtruth.begin() + video_length);
@@ -370,17 +368,11 @@ int main(int argc, char** argv) {
 
             DEBUGMSG("Initialization on frame %d. \n", frame);
 
-cout << frame << camera->get_orientation() << camera->get_focal_length() << endl;
-
             Region initialize = initialization_region.project(camera).region();
-
-cout << initialize << endl;
 
             Mat sensor;
             project_image(cubemap, camera, sensor);
             Image image = convert_image(sensor, metadata.image_formats());
-
-imwrite("test.png", sensor);
 
             // Start timing a frame
             clock_t timing_toc;
@@ -408,8 +400,6 @@ imwrite("test.png", sensor);
 
                 if (frame < (int)camera_views.size())
                     camera->set_view(camera_views[frame]);
-
-cout << frame << camera->get_orientation() << camera->get_focal_length() << endl;
 
                 Region reference = groundtruth[frame].project(camera).region();
 
@@ -458,9 +448,6 @@ cout << frame << camera->get_orientation() << camera->get_focal_length() << endl
 
                 if (frame < (int)camera_views.size())
                     camera->set_view(camera_views[frame]);
-
-cout << frame << camera->get_orientation() << camera->get_focal_length() << endl;
-
 
                 project_image(cubemap, camera, sensor);
                 image = convert_image(sensor, metadata.image_formats());
